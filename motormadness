@@ -1,0 +1,43 @@
+const int buttonPin=2;
+const int motorPin=11;
+
+int motorState= 0;
+int buttonState;
+int lastbuttonState=LOW;
+
+unsigned long lastDebounceTime=0;
+unsigned long debounceDelay=50;
+
+void setup() {
+  // put your setup code here, to run once:
+  pinMode(buttonPin, INPUT);
+  pinMode (motorPin, OUTPUT);
+  analogWrite (motorPin, motorState);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int reading= digitalRead (buttonPin);
+
+  if (reading != lastbuttonState){
+    lastDebounceTime= millis();
+  }
+
+  if ((millis()- lastDebounceTime)> debounceDelay){
+     lastDebounceTime= millis();
+
+  if (reading != buttonState){
+    buttonState= reading;
+  }
+  if (buttonState== HIGH){
+    motorState += 64;
+  }
+  if (motorState > 255){
+    motorState = 0;
+  }
+  
+  }
+  analogWrite(motorPin, motorState);
+
+  lastbuttonState= reading;
+}
